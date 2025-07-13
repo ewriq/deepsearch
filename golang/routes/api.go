@@ -8,4 +8,6 @@ import (
 
 func Api(app fiber.Router) {
 	app.Get("/", handler.Home)
+	app.Get("/search/:token", handler.Search)
+
 }

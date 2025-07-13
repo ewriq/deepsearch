@@ -1,16 +1,15 @@
-package api
+package main
 
 import (
 	"deepsearch/middleware"
 	"deepsearch/routes"
 	"deepsearch/utils"
-	"fmt"
 
 	"github.com/gofiber/fiber/v3"
 	"github.com/gofiber/fiber/v3/middleware/recover"
 )
 
-func Start() error {
+func main()  {
 	Config := utils.LoadConfig("./config/server.ini")
 	app := fiber.New()
 
@@ -26,11 +25,8 @@ func Start() error {
 	routes.Api(service)
 
 	app.Use(middleware.NotFound)
-fmt.Println(Config.Port, " is the port the server is running on.")
 	err := app.Listen(Config.Port)
 	if err != nil {
 		panic(err)
 	}
-
-	return err
 }

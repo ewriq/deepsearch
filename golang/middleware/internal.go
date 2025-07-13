@@ -18,8 +18,9 @@ func Compress(c fiber.Ctx) error {
 }
 
 var Cors = cors.New(cors.Config{
-    AllowOrigins: []string{"http://localhost:4000"},
-    AllowHeaders: []string{"Origin", "Content-Type", "Accept"},
+	AllowOrigins:     []string{"http://localhost:5173"}, 
+	AllowHeaders		:     	[]string{"Origin, Content-Type, Accept"},
+
 })
 
 func Error(c fiber.Ctx) error {
@@ -59,11 +60,7 @@ var RateLimit = limiter.New(limiter.Config{
 })
 
 func Security(c fiber.Ctx) error {
-	c.Set("X-XSS-Protection", "1; mode=block")
-	c.Set("X-Content-Type-Options", "nosniff")
-	c.Set("X-Download-Options", "noopen")
-	c.Set("Strict-Transport-Security", "max-age=5184000")
-	c.Set("X-Frame-Options", "DENY")
-	c.Set("X-DNS-Prefetch-Control", "off")
+	c.Set("Content-Security-Policy", "default-src * 'self' data: blob: 'unsafe-inline' 'unsafe-eval'");
+	
 	return c.Next()
 }
