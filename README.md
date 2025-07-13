@@ -1,4 +1,4 @@
-# DeepSearch
+# 👻 DeepSearch
 
 DeepSearch, kullanıcıların çeşitli kaynaklardan bilgi araması yapmasını sağlayan, LLM (Large Language Model) destekli bir arama motoru uygulamasıdır. Bu proje, **GoFiber** framework'ü ile geliştirilmiş bir backend, **Svelte** tabanlı bir frontend ve **PostgreSQL** veritabanı kullanılarak oluşturulmuştur. Ayrıca, Tailwind CSS gibi modern araçlarla zengin bir kullanıcı arayüzü sunar.
 
