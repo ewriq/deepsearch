@@ -7,7 +7,7 @@
       performSearch,
       handleKeyPress,
       renderMarkdown
-    } from '../lib/index'; // Yolunuzun doğru olduğundan emin olun
+    } from '../lib/index'; 
 </script>
 
 <div class="flex flex-col items-center justify-center min-h-screen p-6 bg-gray-900 text-gray-100 font-sans">
