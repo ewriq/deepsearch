@@ -1,21 +1,35 @@
 package database
 
 import (
-	"deepsearch/utils"
 	"log"
 
-	"gorm.io/driver/postgres"
+	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 )
+
 var db *gorm.DB
 
 func init() {
-	config := utils.LoadConfig("./config/server.ini")
-
 	var err error
-	db, err = gorm.Open(postgres.Open(config.Database), &gorm.Config{})
+	db, err = gorm.Open(sqlite.Open("database/data.db"), &gorm.Config{})
 	if err != nil {
-		log.Fatalf("failed to connect database: %v", err)
+		log.Fatalf("Veritabanına bağlanılamadı: %v", err)
 	}
-	db.AutoMigrate(&Search{})
+
+	// FTS4 tablosu oluşturuyoruz (FTS5 yoksa alternatif)
+	err = db.Exec(`CREATE VIRTUAL TABLE IF NOT EXISTS search USING fts4(query, content);`).Error
+	if err != nil {
+		log.Fatalf("FTS tablosu oluşturulamadı: %v", err)
+	}
+}
+
+
+type Search struct {
+	RowID   int    `gorm:"column:rowid;primaryKey"`
+	Query   string
+	Content string
+}
+
+func (Search) TableName() string {
+	return "search"
 }
