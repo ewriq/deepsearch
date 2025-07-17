@@ -2,18 +2,28 @@ package handler
 
 import (
 	"deepsearch/database"
+	"net/url"
+
 	"github.com/gofiber/fiber/v3"
 )
 
 func Search(c fiber.Ctx) error {
-	token := c.Params("token")
-	if token == "" {
+	encodedToken := c.Params("token")
+	if encodedToken == "" {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"status":  "fail",
 			"message": "Token is required",
 		})
 	}
 
+	token, err := url.QueryUnescape(encodedToken)
+	if err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"status":  "fail",
+			"message": "Invalid token parameter",
+		})
+	}
+	
 	result, err := database.RunSearch(token)
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
