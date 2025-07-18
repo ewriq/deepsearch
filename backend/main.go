@@ -5,11 +5,11 @@ import (
 	"deepsearch/routes"
 	"deepsearch/utils"
 
-	"github.com/gofiber/fiber/v3"
-	"github.com/gofiber/fiber/v3/middleware/recover"
+	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/recover"
 )
 
-func main()  {
+func main() {
 	Config := utils.LoadConfig("./config/server.ini")
 	app := fiber.New()
 

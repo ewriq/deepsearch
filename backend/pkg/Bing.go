@@ -7,14 +7,25 @@ import (
 	g "github.com/serpapi/google-search-results-golang"
 )
 
+
+
+
+
 func Bing(query string) ([]string, error) {
 	Config := utils.LoadConfig("./config/search.ini")
 
+	params := SearchParams{
+		Engine: "bing",
+		Query:  query,
+		CC:     "US",
+		HL:     "en",
+	}
+
 	parameter := map[string]string{
-		"engine": "bing",
-		"q":      query,
-		"cc":       "US",
-		"hl":       "en",
+		"engine": params.Engine,
+		"q":      params.Query,
+		"cc":     params.CC,
+		"hl":     params.HL,
 	}
 
 	search := g.NewGoogleSearch(parameter, Config.Serpapi)
@@ -24,16 +35,18 @@ func Bing(query string) ([]string, error) {
 		return nil, err
 	}
 
-	organic, ok := results["organic_results"].([]interface{})
+	organicResults, ok := results["organic_results"].([]interface{})
 	if !ok {
 		return nil, fmt.Errorf("unexpected format in Bing response")
 	}
 
 	var snippets []string
-	for _, item := range organic {
+	for _, item := range organicResults {
 		if entry, ok := item.(map[string]interface{}); ok {
+			var result OrganicResult
 			if snippet, ok := entry["snippet"].(string); ok {
-				snippets = append(snippets, snippet)
+				result.Snippet = snippet
+				snippets = append(snippets, result.Snippet)
 			}
 		}
 	}

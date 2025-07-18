@@ -2,7 +2,6 @@ package pkg
 
 import (
 	"bytes"
-	"deepsearch/utils"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
@@ -11,8 +10,7 @@ import (
 )
 
 func Gemini(query string) (string, error) {
-	config := utils.LoadConfig("./config/search.ini")
-	apiKey := config.Gemini
+	apiKey := Config.Gemini
 	if apiKey == "" {
 		return "", fmt.Errorf("Gemini API key not found in config")
 	}
@@ -22,7 +20,7 @@ func Gemini(query string) (string, error) {
 		return "", fmt.Errorf("cross data fetch error: %v", err)
 	}
 
-	prompt := fmt.Sprintf("\n%s%s%s%s", config.Prompt, query, crossdata, query)
+	prompt := fmt.Sprintf("\n%s%s%s%s", Config.Prompt, query, crossdata, query)
 
 	url := "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-lite:generateContent?key=" + apiKey
 
@@ -54,12 +52,12 @@ func Gemini(query string) (string, error) {
 }
 
 func FetchCrossData(query string) ([]string, error) {
-	config := utils.LoadConfig("./config/search.ini")
+	
 	url := "https://localhost:5000/api/search/" + query
 
 	var combinedResults []string
 
-	if config.Google {
+	if Config.Google {
 		googleJSON, err := Google(query)
 		if err != nil {
 			log.Printf("Google arama hatası: %v", err)
@@ -68,7 +66,7 @@ func FetchCrossData(query string) ([]string, error) {
 		}
 	}
 
-	if config.Yandex {
+	if Config.Yandex {
 		yandexJSON, err := Yandex(query)
 		if err != nil {
 			log.Printf("Yandex arama hatası: %v", err)
@@ -77,7 +75,7 @@ func FetchCrossData(query string) ([]string, error) {
 		}
 	}
 
-	if config.Bing {
+	if Config.Bing {
 		bingJSON, err := Bing(query)
 		if err != nil {
 			log.Printf("Bing arama hatası: %v", err)
@@ -86,7 +84,7 @@ func FetchCrossData(query string) ([]string, error) {
 		}
 	}
 
-	if config.Alternative {
+	if Config.Alternative {
 	resp, err := http.Get(url)
 	if err != nil {
 		log.Printf("External API isteği hatası: %v", err)

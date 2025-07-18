@@ -2,17 +2,24 @@ package pkg
 
 import (
 	"deepsearch/utils"
-
 	"fmt"
 
 	g "github.com/serpapi/google-search-results-golang"
 )
 
+
+
 func Google(query string) ([]string, error) {
 	Config := utils.LoadConfig("./config/search.ini")
+
+	params := SearchParams{
+		Engine: "google",
+		Query:  query,
+	}
+
 	parameter := map[string]string{
-		"engine": "google",
-		"q":      query,
+		"engine": params.Engine,
+		"q":      params.Query,
 	}
 
 	search := g.NewGoogleSearch(parameter, Config.Serpapi)
@@ -29,8 +36,10 @@ func Google(query string) ([]string, error) {
 	var snippets []string
 	for _, item := range organicResults {
 		if entry, ok := item.(map[string]interface{}); ok {
+			var result OrganicResult
 			if snippet, ok := entry["snippet"].(string); ok {
-				snippets = append(snippets, snippet)
+				result.Snippet = snippet
+				snippets = append(snippets, result.Snippet)
 			}
 		}
 	}

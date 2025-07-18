@@ -7,11 +7,18 @@ import (
 	g "github.com/serpapi/google-search-results-golang"
 )
 
+
 func Yandex(query string) ([]string, error) {
 	Config := utils.LoadConfig("./config/search.ini")
+
+	params := SearchParams{
+		Engine: "yandex",
+		Query:  query,
+	}
+
 	parameter := map[string]string{
-		"engine": "yandex",
-		"text":   query,
+		"engine": params.Engine,
+		"text":   params.Query, 
 	}
 
 	search := g.NewGoogleSearch(parameter, Config.Serpapi)
@@ -20,16 +27,18 @@ func Yandex(query string) ([]string, error) {
 		return nil, err
 	}
 
-	organic, ok := results["organic_results"].([]interface{})
+	organicResults, ok := results["organic_results"].([]interface{})
 	if !ok {
 		return nil, fmt.Errorf("unexpected format for organic_results")
 	}
 
 	var snippets []string
-	for _, item := range organic {
+	for _, item := range organicResults {
 		if entry, ok := item.(map[string]interface{}); ok {
+			var result OrganicResult
 			if snippet, ok := entry["snippet"].(string); ok {
-				snippets = append(snippets, snippet)
+				result.Snippet = snippet
+				snippets = append(snippets, result.Snippet)
 			}
 		}
 	}

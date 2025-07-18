@@ -1,6 +1,7 @@
 package database
 
 import (
+
 	"log"
 
 	"gorm.io/driver/sqlite"
@@ -9,14 +10,15 @@ import (
 
 var db *gorm.DB
 
+
 func init() {
+
 	var err error
 	db, err = gorm.Open(sqlite.Open("database/data.db"), &gorm.Config{})
 	if err != nil {
 		log.Fatalf("Veritabanına bağlanılamadı: %v", err)
 	}
 
-	// FTS4 tablosu oluşturuyoruz (FTS5 yoksa alternatif)
 	err = db.Exec(`CREATE VIRTUAL TABLE IF NOT EXISTS search USING fts4(query, content);`).Error
 	if err != nil {
 		log.Fatalf("FTS tablosu oluşturulamadı: %v", err)
