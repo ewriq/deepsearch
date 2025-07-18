@@ -55,31 +55,50 @@ func Gemini(query string) (string, error) {
 
 func FetchCrossData(query string) ([]string, error) {
 	config := utils.LoadConfig("./config/search.ini")
+	url := "https://localhost:5000/api/search/" + query
 
 	var combinedResults []string
-	if config.Google {
 
-		if googleJSON, err := Google(query); err != nil {
-			log.Printf("Google search error: %v", err)
+	if config.Google {
+		googleJSON, err := Google(query)
+		if err != nil {
+			log.Printf("Google arama hatası: %v", err)
 		} else {
-			combinedResults = append(combinedResults, fmt.Sprintf("\n%s", googleJSON))
+			combinedResults = append(combinedResults, googleJSON...)
 		}
 	}
+
 	if config.Yandex {
-		if yandexJSON, err := Yandex(query); err != nil {
-			log.Printf("Yandex search error: %v", err)
+		yandexJSON, err := Yandex(query)
+		if err != nil {
+			log.Printf("Yandex arama hatası: %v", err)
 		} else {
-			combinedResults = append(combinedResults, fmt.Sprintf("\n%s", yandexJSON))
+			combinedResults = append(combinedResults, yandexJSON...)
 		}
 	}
 
 	if config.Bing {
-		if bingJSON, err := Bing(query); err != nil {
-			log.Printf("Bing search error: %v", err)
+		bingJSON, err := Bing(query)
+		if err != nil {
+			log.Printf("Bing arama hatası: %v", err)
 		} else {
-			combinedResults = append(combinedResults, fmt.Sprintf("\n%s", bingJSON))
+			combinedResults = append(combinedResults, bingJSON...)
 		}
 	}
 
+	if config.Alternative {
+	resp, err := http.Get(url)
+	if err != nil {
+		log.Printf("External API isteği hatası: %v", err)
+	} else {
+		defer resp.Body.Close()
+		bodyBytes, err := ioutil.ReadAll(resp.Body)
+		if err != nil {
+			log.Printf("External API response okuma hatası: %v", err)
+		} else {
+			combinedResults = append(combinedResults, string(bodyBytes))
+		}
+	}
+	}
 	return combinedResults, nil
 }

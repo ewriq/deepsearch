@@ -15,6 +15,7 @@ type ConfigList struct {
 	Google   bool
 	Yandex   bool
 	Bing     bool
+	Alternative bool
 }
 
 var Config ConfigList
@@ -34,6 +35,7 @@ func LoadConfig(path string) ConfigList {
 		Google:   cfg.Section("serpapi").Key("google").MustBool(true),
 		Yandex:   cfg.Section("serpapi").Key("yandex").MustBool(true),
 		Bing:     cfg.Section("serpapi").Key("bing").MustBool(true),
+		Alternative: cfg.Section("serpapi").Key("alternative").MustBool(false),
 	}
 
 	return Config
