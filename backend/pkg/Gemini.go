@@ -52,11 +52,12 @@ func Gemini(query string) (string, error) {
 }
 
 func FetchCrossData(query string) ([]string, error) {
-	
-	url := "https://localhost:5000/api/search/" + query
+
+	url := "http://localhost:5000/api/search/" + query
 
 	var combinedResults []string
 
+	
 	if Config.Google {
 		googleJSON, err := Google(query)
 		if err != nil {
@@ -85,18 +86,19 @@ func FetchCrossData(query string) ([]string, error) {
 	}
 
 	if Config.Alternative {
-	resp, err := http.Get(url)
-	if err != nil {
-		log.Printf("External API isteği hatası: %v", err)
-	} else {
-		defer resp.Body.Close()
-		bodyBytes, err := ioutil.ReadAll(resp.Body)
+		resp, err := http.Get(url)
 		if err != nil {
-			log.Printf("External API response okuma hatası: %v", err)
+			log.Printf("External API isteği hatası: %v", err)
 		} else {
-			combinedResults = append(combinedResults, string(bodyBytes))
+			defer resp.Body.Close()
+			bodyBytes, err := ioutil.ReadAll(resp.Body)
+			if err != nil {
+				log.Printf("External API response okuma hatası: %v", err)
+			} else {
+				combinedResults = append(combinedResults, string(bodyBytes))
+				log.Printf("External API response: %s", string(bodyBytes))
+			}
 		}
-	}
 	}
 	return combinedResults, nil
 }

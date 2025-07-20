@@ -1,4 +1,11 @@
 const { Wikipedia, Wikidata, DBpedia, InternetArchive } = require("./data");
+const Tor = require("./tor");
+const puppeteer = require('puppeteer-extra');
+const AdblockerPlugin = require('puppeteer-extra-plugin-adblocker');
+const { browser } = require('./browser');
+
+puppeteer.use(AdblockerPlugin());
+
 
 async function deepSearch(term) {
     const results = [];
@@ -30,13 +37,30 @@ async function deepSearch(term) {
     } catch (e) {
         console.error("Internet Archive hata:", e.message);
     }
-     
+
     try {
-        const duckDuckGoResults = await DuckDuckGo(term);
+        const duckDuckGoResults = await Tor(term);
         results.push(...duckDuckGoResults);
     } catch (e) {
-        console.error("DuckDuckGo hata:", e.message);
+        console.error("Tor DuckDuckGo hata:", e.message);
     }
+
+
+(async () => {
+  const term = 'how does photosynthesis work';
+
+  const engines = ['google', 'bing', 'yandex', 'yahoo'];
+
+  for (const engine of engines) {
+    const result = await browser(engine, term);
+    if (result) {
+      console.log(`[${result.source}]`, result.snippet);
+    } else {
+      console.log(`[${engine}] açıklama bulunamadı.`);
+    }
+  }
+})();
+
 
     return results;
 }

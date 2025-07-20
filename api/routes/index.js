@@ -8,7 +8,15 @@ router.get("/search/:term", async (req, res) => {
 
   try {
     const descriptions = await deepSearch(term);
-    res.json({ data: descriptions });
+    const texts = Array.isArray(descriptions)
+      ? descriptions
+          .map(item => item.content || item.description || JSON.stringify(item))
+          .filter(Boolean)
+          .join("\n\n")
+      : descriptions;
+      console.log(texts);
+      
+    res.type("text/plain").send(texts);
   } catch (err) {
     res.status(500).json({ error: "Arama sırasında hata oluştu", details: err.message });
   }
