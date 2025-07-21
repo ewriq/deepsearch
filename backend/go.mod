@@ -8,6 +8,7 @@ require (
 	github.com/gofiber/fiber/v2 v2.52.8
 	github.com/gofiber/fiber/v3 v3.0.0-beta.4
 	github.com/gofiber/websocket v0.5.1
+	github.com/gofiber/websocket/v2 v2.2.1
 	github.com/gorilla/websocket v1.5.3
 	github.com/serpapi/google-search-results-golang v0.0.0-20240325113416-ec93f510648e
 	gorm.io/driver/postgres v1.6.0
@@ -32,7 +33,6 @@ require (
 	github.com/gofiber/schema v1.2.0 // indirect
 	github.com/gofiber/utils v0.0.9 // indirect
 	github.com/gofiber/utils/v2 v2.0.0-beta.7 // indirect
-	github.com/gofiber/websocket/v2 v2.2.1 // indirect
 	github.com/google/uuid v1.6.0 // indirect
 	github.com/gorilla/schema v1.1.0 // indirect
 	github.com/jackc/pgpassfile v1.0.0 // indirect

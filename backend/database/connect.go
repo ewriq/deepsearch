@@ -1,19 +1,17 @@
 package database
 
 import (
-
 	"log"
-
+	
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 )
 
 var db *gorm.DB
-
+var err error
 
 func init() {
-
-	var err error
+	// SQLite bağlantısı
 	db, err = gorm.Open(sqlite.Open("database/data.db"), &gorm.Config{})
 	if err != nil {
 		log.Fatalf("Veritabanına bağlanılamadı: %v", err)
@@ -23,13 +21,7 @@ func init() {
 	if err != nil {
 		log.Fatalf("FTS tablosu oluşturulamadı: %v", err)
 	}
-}
-
-
-type Search struct {
-	RowID   int    `gorm:"column:rowid;primaryKey"`
-	Query   string
-	Content string
+	log.Println("✅ GORM ile Sqlite bağlantısı kuruldu.")
 }
 
 func (Search) TableName() string {

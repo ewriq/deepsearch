@@ -3,6 +3,8 @@ package database
 import (
 	"fmt"
 	"log"
+	"sort"
+	"strings"
 
 	"deepsearch/pkg"
 )
@@ -10,6 +12,7 @@ import (
 // Kayıt ekle
 func AddSearchEntry(query, content string) error {
 	err := db.Exec("INSERT INTO search (query, content) VALUES (?, ?)", query, content).Error
+	log.Println("sdsfdsodoksdookkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk k8sssssssssssssssssssssssssssssssssssssssssssssssss")
 	if err != nil {
 		log.Printf("Arama kaydı eklenirken hata: %v", err)
 	}
@@ -17,17 +20,82 @@ func AddSearchEntry(query, content string) error {
 }
 
 // Arama yap
-func PerformSearch(term string) ([]Search, error) {
-	var results []Search
+func PerformSearch(query string) ([]Search, error) {
+	var allResults []Search
+	term := strings.ToLower(query)
+	likeTerm := "%" + term + "%"
+
 	sql := `
-	SELECT rowid, query, content
-	FROM search
-	WHERE search MATCH ?
-	LIMIT 10000000000;
-	`
-	err := db.Raw(sql, term).Scan(&results).Error
-	return results, err
+    SELECT rowid, query, content
+    FROM search
+    WHERE LOWER(query) LIKE ? OR LOWER(content) LIKE ?
+    LIMIT 50;
+    `
+
+	err := db.Raw(sql, likeTerm, likeTerm).Scan(&allResults).Error
+	if err != nil {
+		return nil, err
+	}
+
+	queryWords := strings.Fields(term)
+	finalResults := make([]Search, 0, len(allResults))
+
+	for _, res := range allResults {
+		totalText := strings.ToLower(res.Query + " " + res.Content)
+		wordsInText := strings.Fields(totalText)
+		wordCount := len(wordsInText)
+		if wordCount == 0 {
+			continue
+		}
+		
+		matchCount := 0
+		for _, qw := range queryWords {
+			if strings.Contains(totalText, qw) {
+				matchCount++
+			}
+		}
+
+		if matchCount == 0 {
+			continue
+		}
+
+
+		totalMatchCount := 0
+		for _, qw := range queryWords {
+			totalMatchCount += strings.Count(totalText, qw)
+		}
+
+		exactQueryMatch := 0
+		if strings.Contains(totalText, term) {
+			exactQueryMatch = 10
+		}
+
+		// Basit alaka puanı hesapla
+		relevance := (float64(totalMatchCount) / float64(wordCount)) * float64(matchCount) + float64(exactQueryMatch)
+		likeLevel := int(relevance * 100)
+		if likeLevel > 100 {
+			likeLevel = 100
+		}
+
+		highlight := ""
+		if totalMatchCount >= 10 {
+			highlight = fmt.Sprintf("⚠ Kelime '%s' toplam %d kez geçti", query, totalMatchCount)
+		}
+
+		res.LikeLevel = likeLevel
+		res.RelevanceScore = relevance
+		res.Highlight = highlight
+
+		finalResults = append(finalResults, res)
+	}
+
+	sort.SliceStable(finalResults, func(i, j int) bool {
+		return finalResults[i].RelevanceScore > finalResults[j].RelevanceScore
+	})
+
+	return finalResults, nil
 }
+
 
 // Arama işlemi ve varsa Gemini ile özet alma
 func RunSearch(term string) (string, error) {

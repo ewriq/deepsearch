@@ -110,7 +110,7 @@ func runSearchAndReportProgress(c *websocket.Conn, term string) {
 	}
 
 	
-	sendMessage("progress", "Veritabanında bulunamadı. Web'de aranıyor...", 30, nil)
+	sendMessage("progress", "Web'de aranıyor...", 30, nil)
 	time.Sleep(500 * time.Millisecond) 
 
 	geminiSummary, geminiErr := pkg.Gemini(term)

@@ -16,6 +16,7 @@ type ConfigList struct {
 	Yandex   bool
 	Bing     bool
 	Alternative bool
+	Dsn      string
 }
 
 var Config ConfigList
@@ -29,6 +30,7 @@ func LoadConfig(path string) ConfigList {
 	Config = ConfigList{
 		Port:     cfg.Section("api").Key("port").MustString(":3000"),
 		Serpapi:  cfg.Section("serpapi").Key("key").String(),
+		Dsn:  cfg.Section("db").Key("dsn").String(),
 		Database: cfg.Section("db").Key("dsn").String(),
 		Gemini:   cfg.Section("ai").Key("gemini").String(),
 		Prompt:   cfg.Section("ai").Key("prompt").String(),

@@ -22,7 +22,7 @@
 </script>
 
 <div
-  class="flex flex-col items-center justify-center min-h-screen p-4 sm:p-6 bg-gray-900 text-gray-100 font-sans"
+  class="flex flex-col items-center justify-center min-h-screen p-4 sm:p-6 bg-gray-950 text-gray-100 font-sans"
 >
   <h1 class="text-4xl sm:text-5xl font-extrabold text-white mb-6 text-center">
     DeepSearch

@@ -14,7 +14,7 @@ async function Wikidata(term) {
 
   return data.results.bindings
     .map(obj => obj.description?.value)
-    .filter(Boolean); 
+    .filter(Boolean);
 }
 
 
@@ -55,29 +55,29 @@ async function InternetArchive(term) {
 
 
 async function DuckDuckGo(term) {
-    const url = `https://api.duckduckgo.com/?q=${encodeURIComponent(term)}&format=json&no_redirect=1&no_html=1&skip_disambig=1`;
-    const { data } = await axios.get(url);
-  
-    const descriptions = [];
-  
-    if (data.AbstractText && data.AbstractText.length > 0) {
-      descriptions.push(data.AbstractText);
-    }
+  const url = `https://api.duckduckgo.com/?q=${encodeURIComponent(term)}&format=json&no_redirect=1&no_html=1&skip_disambig=1`;
+  const { data } = await axios.get(url);
 
-    if (Array.isArray(data.RelatedTopics)) {
-      data.RelatedTopics.forEach(topic => {
-        if (topic.Text) descriptions.push(topic.Text);
-        else if (topic.Topics) {
-          topic.Topics.forEach(subTopic => {
-            if (subTopic.Text) descriptions.push(subTopic.Text);
-          });
-        }
-      });
-    }
-  
-    return descriptions.filter(Boolean);
+  const descriptions = [];
+
+  if (data.AbstractText && data.AbstractText.length > 0) {
+    descriptions.push(data.AbstractText);
   }
-  
+
+  if (Array.isArray(data.RelatedTopics)) {
+    data.RelatedTopics.forEach(topic => {
+      if (topic.Text) descriptions.push(topic.Text);
+      else if (topic.Topics) {
+        topic.Topics.forEach(subTopic => {
+          if (subTopic.Text) descriptions.push(subTopic.Text);
+        });
+      }
+    });
+  }
+
+  return descriptions.filter(Boolean);
+}
+
 
 module.exports = {
   Wikidata,
