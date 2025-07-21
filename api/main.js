@@ -3,11 +3,11 @@ const app = express();
 const indexRouter = require("./routes/index");
 const logger = require("./middleware/logger");
 const deepSearch = require("./pkg/utils");
-
+const bodyParser = require('body-parser')
 
 app.use(express.json());
 app.use(logger); 
-
+app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use("/api", indexRouter);
 

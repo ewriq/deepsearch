@@ -2,8 +2,8 @@ const express = require("express");
 const router = express.Router();
 const deepSearch = require("../pkg/utils");
 
-router.get("/search/:term", async (req, res) => {
-  const term = req.params.term;
+router.post("/search/", async (req, res) => {
+  const term = req.body.term;
   if (!term) return res.status(400).json({ error: "Arama terimi gerekli" });
 
   try {
@@ -23,3 +23,4 @@ router.get("/search/:term", async (req, res) => {
 });
 
 module.exports = router;
+//  // const { browser } = require("../pkg/browser");

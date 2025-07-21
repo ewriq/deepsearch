@@ -10,6 +10,15 @@
     handleKeyPress,
     renderMarkdown,
   } from "../lib/index";
+
+
+  
+  function handleKeyDown(event) {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      performSearch();
+    }
+  }
 </script>
 
 <div
@@ -34,6 +43,7 @@
     <button
       on:click={performSearch}
       disabled={$isLoading}
+      on:keydown={handleKeyDown}
       class="bg-rose-700 text-white font-bold py-3 px-6 rounded-lg shadow-lg
              hover:bg-rose-950 active:bg-rose-800 focus:outline-none focus:ring-2 focus:ring-rose-500
              transition-all duration-300 disabled:bg-gray-600 disabled:cursor-not-allowed

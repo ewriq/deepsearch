@@ -1,4 +1,4 @@
-import { writable } from 'svelte/store';
+import { get, writable } from 'svelte/store';
 import { marked } from 'marked';
 export const searchTerm = writable('');
 export const searchResult = writable(null);
@@ -68,7 +68,7 @@ export function performSearch() {
 
   socket.onclose = () => {
     console.log('WebSocket bağlantısı kapandı.');
-    if (isLoading.get()) {
+    if (get()) {
       isLoading.set(false);
     }
   };
@@ -76,7 +76,7 @@ export function performSearch() {
 
 
 export function handleKeyPress(event) {
-  if (event.key === 'Enter' && !isLoading.get()) {
+  if (event.key === 'Enter' && !get()) {
     performSearch();
   }
 }

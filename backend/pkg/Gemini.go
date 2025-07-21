@@ -52,9 +52,6 @@ func Gemini(query string) (string, error) {
 }
 
 func FetchCrossData(query string) ([]string, error) {
-
-	url := "http://localhost:5000/api/search/" + query
-
 	var combinedResults []string
 
 	
@@ -63,6 +60,7 @@ func FetchCrossData(query string) ([]string, error) {
 		if err != nil {
 			log.Printf("Google arama hatası: %v", err)
 		} else {
+			log.Printf("Google arama sonuçları: %v", googleJSON)
 			combinedResults = append(combinedResults, googleJSON...)
 		}
 	}
@@ -73,6 +71,7 @@ func FetchCrossData(query string) ([]string, error) {
 			log.Printf("Yandex arama hatası: %v", err)
 		} else {
 			combinedResults = append(combinedResults, yandexJSON...)
+			log.Printf("Yandex arama sonuçları: %v", yandexJSON)
 		}
 	}
 
@@ -82,11 +81,21 @@ func FetchCrossData(query string) ([]string, error) {
 			log.Printf("Bing arama hatası: %v", err)
 		} else {
 			combinedResults = append(combinedResults, bingJSON...)
+			log.Printf("Bing arama sonuçları: %v", bingJSON)
 		}
 	}
 
 	if Config.Alternative {
-		resp, err := http.Get(url)
+		payload := map[string]string{
+			"term": query,
+		}
+	
+		jsonData, err := json.Marshal(payload)
+		if err != nil {
+			panic(err)
+		}
+
+		resp, err := http.Post("http://localhost:5000/api/search/", "application/json", bytes.NewBuffer(jsonData))
 		if err != nil {
 			log.Printf("External API isteği hatası: %v", err)
 		} else {

@@ -1,5 +1,4 @@
 const { Wikipedia, Wikidata, DBpedia, InternetArchive } = require("./data");
-const Tor = require("./tor");
 const puppeteer = require('puppeteer-extra');
 const AdblockerPlugin = require('puppeteer-extra-plugin-adblocker');
 const { browser } = require('./browser');
@@ -39,27 +38,28 @@ async function deepSearch(term) {
     }
 
     try {
-        const duckDuckGoResults = await Tor(term);
-        results.push(...duckDuckGoResults);
+        const redditResults = await require('./social').redditSearch(term);
+        console.log("Reddit sonuçları:", redditResults);
+        results.push(...redditResults);
     } catch (e) {
-        console.error("Tor DuckDuckGo hata:", e.message);
+        console.error("DuckDuckGo hata:", e.message);
     }
 
 
-(async () => {
-  const term = 'how does photosynthesis work';
+    (async () => {
+        const term = 'how does photosynthesis work';
 
-  const engines = ['google', 'bing', 'yandex', 'yahoo'];
+        const engines = ['bing', 'yandex', 'yahoo'];
 
-  for (const engine of engines) {
-    const result = await browser(engine, term);
-    if (result) {
-      console.log(`[${result.source}]`, result.snippet);
-    } else {
-      console.log(`[${engine}] açıklama bulunamadı.`);
-    }
-  }
-})();
+        for (const engine of engines) {
+            const result = await browser(engine, term);
+            if (result) {
+                console.log(`[${result.source}]`, result.snippet);
+            } else {
+                console.log(`[${engine}] açıklama bulunamadı.`);
+            }
+        }
+    })();
 
 
     return results;

@@ -23,7 +23,7 @@ func PerformSearch(term string) ([]Search, error) {
 	SELECT rowid, query, content
 	FROM search
 	WHERE search MATCH ?
-	LIMIT 1000;
+	LIMIT 10000000000;
 	`
 	err := db.Raw(sql, term).Scan(&results).Error
 	return results, err
