@@ -22,7 +22,7 @@ DeepSearch is an LLM (Large Language Model) powered search engine application th
 
 - **Go** (v1.19+)
 - **Node.js** (v16+)
-- **PostgreSQL** (v13+)
+- **Sqlite** (v3+)
 
 ### Steps
 
