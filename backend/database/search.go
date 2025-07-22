@@ -70,7 +70,6 @@ func PerformSearch(query string) ([]Search, error) {
 			exactQueryMatch = 10
 		}
 
-		// Basit alaka puanı hesapla
 		relevance := (float64(totalMatchCount) / float64(wordCount)) * float64(matchCount) + float64(exactQueryMatch)
 		likeLevel := int(relevance * 100)
 		if likeLevel > 100 {

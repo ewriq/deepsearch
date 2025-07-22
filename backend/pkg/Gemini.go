@@ -54,60 +54,28 @@ func Gemini(query string) (string, error) {
 func FetchCrossData(query string) ([]string, error) {
 	var combinedResults []string
 
-	
-	if Config.Google {
-		googleJSON, err := Google(query)
+	payload := map[string]string{
+		"term": query,
+	}
+
+	jsonData, err := json.Marshal(payload)
+	if err != nil {
+		panic(err)
+	}
+
+	resp, err := http.Post("http://localhost:5000/api/search/", "application/json", bytes.NewBuffer(jsonData))
+	if err != nil {
+		log.Printf("External API isteği hatası: %v", err)
+	} else {
+		defer resp.Body.Close()
+		bodyBytes, err := ioutil.ReadAll(resp.Body)
 		if err != nil {
-			log.Printf("Google arama hatası: %v", err)
+			log.Printf("External API response okuma hatası: %v", err)
 		} else {
-			log.Printf("Google arama sonuçları: %v", googleJSON)
-			combinedResults = append(combinedResults, googleJSON...)
+			combinedResults = append(combinedResults, string(bodyBytes))
+			log.Printf("External API response: %s", string(bodyBytes))
 		}
 	}
 
-	if Config.Yandex {
-		yandexJSON, err := Yandex(query)
-		if err != nil {
-			log.Printf("Yandex arama hatası: %v", err)
-		} else {
-			combinedResults = append(combinedResults, yandexJSON...)
-			log.Printf("Yandex arama sonuçları: %v", yandexJSON)
-		}
-	}
-
-	if Config.Bing {
-		bingJSON, err := Bing(query)
-		if err != nil {
-			log.Printf("Bing arama hatası: %v", err)
-		} else {
-			combinedResults = append(combinedResults, bingJSON...)
-			log.Printf("Bing arama sonuçları: %v", bingJSON)
-		}
-	}
-
-	if Config.Alternative {
-		payload := map[string]string{
-			"term": query,
-		}
-	
-		jsonData, err := json.Marshal(payload)
-		if err != nil {
-			panic(err)
-		}
-
-		resp, err := http.Post("http://localhost:5000/api/search/", "application/json", bytes.NewBuffer(jsonData))
-		if err != nil {
-			log.Printf("External API isteği hatası: %v", err)
-		} else {
-			defer resp.Body.Close()
-			bodyBytes, err := ioutil.ReadAll(resp.Body)
-			if err != nil {
-				log.Printf("External API response okuma hatası: %v", err)
-			} else {
-				combinedResults = append(combinedResults, string(bodyBytes))
-				log.Printf("External API response: %s", string(bodyBytes))
-			}
-		}
-	}
 	return combinedResults, nil
 }
