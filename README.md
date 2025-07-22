@@ -9,7 +9,7 @@ DeepSearch is an LLM (Large Language Model) powered search engine application th
 
 - **LLM-Powered Summarization and Analysis**: Summarizes and analyzes search results.
 - **Multiple Search Engine Support**: Fetches data from search engines like Google, Yandex, and Bing.
-- **PostgreSQL Database**: Used to store and manage search results.
+- **Sqlite Database**: Used to store and manage search results.
 - **Fiber Framework**: A fast and scalable backend.
 - **Svelte Frontend**: A user-friendly and high-performance interface.
 - **Tailwind CSS**: A modern and stylish design.
