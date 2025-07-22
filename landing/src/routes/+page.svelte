@@ -54,7 +54,7 @@
     </section>
     <div class="flex flex-col items-center mb-4 mt-50">
         <Github class="h-8 w-8 mb-2" />
-        <h3 class="text-xl font-semibold">GitHub <a href="https://github.com/ewriq/deepsearch" class="font-bold text-white">DeepSearch</a></h3>
+        <h3 class="text-xl font-semibold">GitHub <a href="" class="font-bold text-white">DeepSearch</a></h3>
         <p class="text-sm">Search For The Ones You Have In Mind And You Will Have The Final Result</p>
       </div>
       <div class="flex items-center justify-center space-x-2 mb-2">
