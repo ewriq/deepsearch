@@ -1,83 +1,84 @@
+
 # 👻 DeepSearch
 
-DeepSearch, kullanıcıların çeşitli kaynaklardan bilgi araması yapmasını sağlayan, LLM (Large Language Model) destekli bir arama motoru uygulamasıdır. Bu proje, **GoFiber** framework'ü ile geliştirilmiş bir backend, **Svelte** tabanlı bir frontend ve **PostgreSQL** veritabanı kullanılarak oluşturulmuştur. Ayrıca, Tailwind CSS gibi modern araçlarla zengin bir kullanıcı arayüzü sunar.
+DeepSearch is an LLM (Large Language Model) powered search engine application that allows users to search for information from various sources. This project was created using a backend developed with the **GoFiber** framework, a **Svelte**-based frontend, and a **PostgreSQL** database. It also offers a rich user interface with modern tools like Tailwind CSS.
 
 ---
 
-## 🚀 Özellikler
+## 🚀 Features
 
-- **LLM Destekli Özetleme ve Analiz**: Arama sonuçlarını özetler ve analiz eder.
-- **Çoklu Arama Motoru Desteği**: Google, Yandex ve Bing gibi arama motorlarından veri çekme.
-- **PostgreSQL Veritabanı**: Arama sonuçlarını depolamak ve yönetmek için kullanılır.
-- **Fiber Framework**: Hızlı ve ölçeklenebilir bir backend.
-- **Svelte Frontend**: Kullanıcı dostu ve performanslı bir arayüz.
-- **Tailwind CSS**: Modern ve şık bir tasarım.
+- **LLM-Powered Summarization and Analysis**: Summarizes and analyzes search results.
+- **Multiple Search Engine Support**: Fetches data from search engines like Google, Yandex, and Bing.
+- **PostgreSQL Database**: Used to store and manage search results.
+- **Fiber Framework**: A fast and scalable backend.
+- **Svelte Frontend**: A user-friendly and high-performance interface.
+- **Tailwind CSS**: A modern and stylish design.
 
 
 
-## 🛠️ Kurulum
+## 🛠️ Installation
 
-### Gereksinimler
+### Requirements
 
 - **Go** (v1.19+)
 - **Node.js** (v16+)
 - **PostgreSQL** (v13+)
 
-### Adımlar
+### Steps
 
-1. **Depoyu Klonlayın**:
-   ```bash
-   git clone https://github.com/kullanici-adi/deepsearch.git
-   cd deepsearch
-   ```
+1.  **Clone the Repository**:
+    ```bash
+    git clone https://github.com/username/deepsearch.git
+    cd deepsearch
+    ```
 
-2. **Backend Bağımlılıklarını Yükleyin**:
-   ```bash
-   go mod tidy
-   ```
+2.  **Install Backend Dependencies**:
+    ```bash
+    go mod tidy
+    ```
 
-3. **Frontend Bağımlılıklarını Yükleyin**:
-   ```bash
-   cd web
-   npm install
-   ```
+3.  **Install Frontend Dependencies**:
+    ```bash
+    cd web
+    npm install
+    ```
 
-4. **Veritabanını Ayarlayın**:
-   PostgreSQL'de bir veritabanı oluşturun ve `config/server.ini` dosyasındaki `dsn` değerini güncelleyin:
-   ```ini
-   [db]
-   dsn="postgresql://user:password@localhost:5432/deepsearch"
-   ```
+4.  **Set Up the Database**:
+    Create a database in PostgreSQL and update the `dsn` value in the `config/server.ini` file:
+    ```ini
+    [db]
+    dsn="postgresql://user:password@localhost:5432/deepsearch"
+    ```
 
-5. **Arama Motoru ve LLM API Anahtarlarını Ayarlayın**:
-   `config/search.ini` dosyasındaki `key` ve `gemini` alanlarını doldurun:
-   ```ini
-   [serpapi]
-   key = "YOUR_SERPAPI_KEY"
+5.  **Set Up Search Engine and LLM API Keys**:
+    Fill in the `key` and `gemini` fields in the `config/search.ini` file:
+    ```ini
+    [serpapi]
+    key = "YOUR_SERPAPI_KEY"
 
-   [ai]
-   gemini = "YOUR_LLM_API_KEY"
-   ```
+    [ai]
+    gemini = "YOUR_LLM_API_KEY"
+    ```
 
-6. **Backend'i Çalıştırın**:
-   ```bash
-   go run main.go
-   ```
+6.  **Run the Backend**:
+    ```bash
+    go run main.go
+    ```
 
-7. **Frontend'i Çalıştırın**:
-   ```bash
-   cd web
-   npm run dev
-   ```
+7.  **Run the Frontend**:
+    ```bash
+    cd web
+    npm run dev
+    ```
 
-8. **Uygulamayı Açın**:
-   Tarayıcınızda `http://localhost:3000` adresine gidin.
+8.  **Open the Application**:
+    Go to `http://localhost:3000` in your browser.
 
 
-## 🔧 Yapılandırma
+## 🔧 Configuration
 
 ### `server.ini`
-API ve veritabanı ayarlarını içerir:
+Contains API and database settings:
 ```ini
 [api]
 port = ":3000"
@@ -87,7 +88,7 @@ dsn = "postgresql://user:password@localhost:5432/deepsearch"
 ```
 
 ### `search.ini`
-Arama motoru ve LLM ayarlarını içerir:
+Contains search engine and LLM settings:
 ```ini
 [serpapi]
 key = "YOUR_SERPAPI_KEY"
@@ -97,22 +98,22 @@ bing = true
 
 [ai]
 gemini = "YOUR_GEMINI_API_KEY"
-prompt = "Buradaki veriye göre bana bir özet çıkarmanı ve analiz etmeni..."
+prompt = "Based on the data here, I want you to extract a summary and analyze it..."
 ```
 
 
-## 📜 Kullanım
+## 📜 Usage
 
-1. **Arama Yapın**: Ana sayfada bir sorgu girin ve "Ara" butonuna tıklayın.
-2. **Sonuçları Görüntüleyin**: Arama sonuçları özetlenmiş ve analiz edilmiş şekilde görüntülenir.
-3. **Hata Mesajları**: Eğer bir hata oluşursa, kullanıcıya uygun bir mesaj gösterilir.
-
-
-## 🤝 Katkıda Bulunun
-
-Katkıda bulunmak isterseniz, lütfen bir **pull request** gönderin veya bir **issue** açın. Her türlü katkı memnuniyetle karşılanır!
+1.  **Perform a Search**: Enter a query on the main page and click the "Search" button.
+2.  **View the Results**: The search results are displayed in a summarized and analyzed form.
+3.  **Error Messages**: If an error occurs, an appropriate message is shown to the user.
 
 
-## 🌟 Destek
+## 🤝 Contributing
 
-Eğer bu projeyi beğendiyseniz, lütfen ⭐ vererek destek olun! 😊
+If you want to contribute, please submit a **pull request** or open an **issue**. All contributions are welcome!
+
+
+## 🌟 Support
+
+If you like this project, please support it by giving it a ⭐! 😊
